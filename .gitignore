@@ -1,1 +1,4 @@
-./Build
+/Build
+/.vscode
+/.cache
+/Commands
