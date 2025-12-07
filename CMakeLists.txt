@@ -9,10 +9,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 include("DefineBuildType")
 
 # Includes & etc.
-include_directories("${WindowsSDKInclude}")
-link_directories("${WindowsSDKLib}")
-
-include_directories("${VulkanSDKInclude}")
-link_directories("${VulkanSDKLib}")
+include_directories("${VulkanSDK_Root}/Include")
+link_directories("${VulkanSDK_Root}/Lib")
 
 add_subdirectory("Source")
