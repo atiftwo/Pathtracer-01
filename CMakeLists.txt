@@ -7,6 +7,12 @@ set(CMAKE_C_STANDARD 17)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 include("DefineBuildType")
-include("LibraryDirectories")
+
+# Includes & etc.
+include_directories("${WindowsSDKInclude}")
+link_directories("${WindowsSDKLib}")
+
+include_directories("${VulkanSDKInclude}")
+link_directories("${VulkanSDKLib}")
 
 add_subdirectory("Source")
