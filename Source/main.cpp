@@ -9,7 +9,9 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
- 
+#include "CPUPathtracer/Main.hpp"
+#include <windows.h>
+
 typedef struct Vertex
 {
     glm::vec2 pos;
@@ -54,7 +56,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
- 
+
 int main(void)
 {
     glfwSetErrorCallback(error_callback);
@@ -123,6 +125,9 @@ int main(void)
         const float ratio = width / (float) height;
  
         glViewport(0, 0, width, height);
+
+		UpdateTick();
+
         glClear(GL_COLOR_BUFFER_BIT);
  
         glfwSwapBuffers(window);
