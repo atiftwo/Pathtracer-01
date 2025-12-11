@@ -1,49 +1,13 @@
-#include <glad/glad.h>
-#include <glm/glm.hpp>
-
-#include <GLFW/glfw3.h>
 #include "Program.hpp"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
 namespace Program
 {
-
-	typedef struct Vertex
-	{
-		glm::vec2 pos;
-		glm::vec3 col;
-	} Vertex;
-
-	static const Vertex vertices[3] =
-	{
-		{ { -0.6f, -0.4f }, { 1.f, 0.f, 0.f } },
-		{ {  0.6f, -0.4f }, { 0.f, 1.f, 0.f } },
-		{ {   0.f,  0.6f }, { 0.f, 0.f, 1.f } }
-	};
-
-	static const char* vertex_shader_text =
-	"#version 330\n"
-	"uniform mat4 MVP;\n"
-	"in vec3 vCol;\n"
-	"in vec2 vPos;\n"
-	"out vec3 color;\n"
-	"void main()\n"
-	"{\n"
-	"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-	"    color = vCol;\n"
-	"}\n";
-
-	static const char* fragment_shader_text =
-	"#version 330\n"
-	"in vec3 color;\n"
-	"out vec4 fragment;\n"
-	"void main()\n"
-	"{\n"
-	"    fragment = vec4(color, 1.0);\n"
-	"}\n";
-
 	GLFWwindow* producedWindow;
 
 	int ProduceWindow()
@@ -69,7 +33,7 @@ namespace Program
 			return 1;
 		}
 
-		// TODO: Manually load dwmapi
+		// Manually load dwmapi to change border colour
 		{
 			HMODULE dwmapiHandle = LoadLibrary("Dwmapi.dll");
 
@@ -96,20 +60,26 @@ namespace Program
 		return 0;
 	}
 
+	int width, height;
 	void StartUpdateLoop(void(*UpdateLoopFunction)())
 	{
 		while (!glfwWindowShouldClose(producedWindow)) {
-			int width, height;
 			glfwGetFramebufferSize(producedWindow, &width, &height);
 
 			glViewport(0, 0, width, height);
         	glClear(GL_COLOR_BUFFER_BIT);
 
 			UpdateLoopFunction();
-
+			
 			glfwSwapBuffers(producedWindow);
 			glfwPollEvents();
 		}
+	}
+
+	// Get functions
+	glm::ivec2 GetWindowSize()
+	{
+		return {width, height};
 	}
 
 	void Exit()

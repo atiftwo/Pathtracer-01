@@ -1,6 +1,9 @@
-add_executable(Main WIN32 "Main.cpp")
+# Source files
+
+add_executable(Main WIN32 "Main.cpp" "Pathtracer/Render.cpp")
 target_sources(Main PRIVATE "Program.cpp")
-#target_sources(Main PRIVATE "CPUPathtracer/Main.cpp")
+
+# Includes and linking
 
 target_sources(Main PRIVATE "${GLAD_SourceDir}/glad.c")
 target_include_directories(Main PUBLIC "${GLAD_Include}")
