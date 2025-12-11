@@ -99,7 +99,6 @@ namespace Program
 				DWMWA_LAST
 			};
 			HMODULE dwmapiHandle = LoadLibrary("Dwmapi.dll");
-			HMODULE uxThemeApiHandle = LoadLibrary("Uxtheme.dll");
 
 			HWND win32_windowHandle = glfwGetWin32Window(producedWindow);
 			int tmp = TRUE;
@@ -108,7 +107,6 @@ namespace Program
 			SetAttribute(win32_windowHandle, DWMWA_USE_IMMERSIVE_DARK_MODE, &tmp, sizeof(int));
 
 			FreeLibrary(dwmapiHandle);
-			FreeLibrary(uxThemeApiHandle);
 		}
 
 		// Setup OpenGL
