@@ -4,4 +4,5 @@ namespace Program
 {
 	int ProduceWindow();
 	void StartUpdateLoop(void(*UpdateLoopFunction)());
+	void Exit();
 }

@@ -4,13 +4,11 @@
 
 int main()
 {
-	if (!Program::ProduceWindow()) return 1;
+	if (Program::ProduceWindow() != 0) return 1;
 
-	auto UpdateFunction = []() -> void {
-		glfwPollEvents();
-	};
+	auto UpdateFunction = []() -> void {};
 	Program::StartUpdateLoop(UpdateFunction);
 
-	glfwTerminate();
+	Program::Exit();
 	return 0;
 }
