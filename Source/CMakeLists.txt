@@ -1,5 +1,5 @@
 add_executable(Main WIN32 "Main.cpp")
-target_sources(Main PRIVATE "Windows/Program.cpp")
+target_sources(Main PRIVATE "Program.cpp")
 #target_sources(Main PRIVATE "CPUPathtracer/Main.cpp")
 
 target_sources(Main PRIVATE "${GLAD_SourceDir}/glad.c")
