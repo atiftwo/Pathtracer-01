@@ -2,11 +2,21 @@
 
 #include <glm/glm.hpp>
 
-namespace Program
-{
-	int ProduceWindow();
-	void StartUpdateLoop(void(*UpdateLoopFunction)());
-	void Exit();
+namespace Program {
+	class Window {
+		Window();
+		~Window();
 
-	glm::ivec2 GetWindowSize();
+		public:
+		int Create();
+		void StartUpdateLoop();
+		void BreakUpdateLoop();
+		void Deinitialise();
+
+		typedef void(*UpdateLoopFunction)();
+		UpdateLoopFunction updateLoopFunction;
+
+		glm::ivec2 GetWindowSize();
+		double GetElapsedTime();
+	};
 }
