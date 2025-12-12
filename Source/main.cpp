@@ -4,13 +4,14 @@
 
 int main()
 {
-	if (Program::ProduceWindow() != 0) return 1;
+	Program::Window programWindow;
+	if (programWindow.Create() != 0) return 1;
 
 	// Shader initialisaiton
 	const char* fragmentShaderCode =
 	"#version 330 core\n"
 	"out vec4 FragColor;\n"
-	"void main() {FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);}\0";
+	"void main() {FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);}\0";
 
 	unsigned int fragmentShader;
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -27,12 +28,46 @@ int main()
 	glShaderSource(vertexShader, 1, &vertexShaderCode, NULL);
 	glCompileShader(vertexShader);
 
-	auto UpdateFunction = []() -> void
-	{
-		
-	};
-	Program::StartUpdateLoop(UpdateFunction);
+	int shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
 
-	Program::Deinitialise();
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+	
+	// Vertex	
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f
+	};
+
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	
+	while (!programWindow.WindowWillClose()) {
+		glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+		glUseProgram(shaderProgram);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		vertices[0] += 0.05;
+
+		programWindow.UpdateWindow();
+	}
+
 	return 0;
 }

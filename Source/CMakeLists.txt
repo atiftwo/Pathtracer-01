@@ -1,6 +1,6 @@
 # Source files
 
-add_executable(Main WIN32 "Main.cpp" "Pathtracer/Render.cpp")
+add_executable(Main WIN32 "Main.cpp")
 target_sources(Main PRIVATE "Program.cpp")
 
 # Includes and linking

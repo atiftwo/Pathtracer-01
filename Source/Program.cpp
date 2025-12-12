@@ -1,18 +1,25 @@
 #include "Program.hpp"
 
 #include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
+#include <windows.h>
 
-// Callbacks
-void WindowResizeCallback(GLFWwindow*, int, int);
+// Callback functions' definition
+inline glm::ivec2 windowSize;
+inline void WindowResizeCallback(GLFWwindow*, int, int);
 
-GLFWwindow* producedWindow;
+// Primary functions' implementation
+Program::Window::~Window() {
+	Deinitialise();
+}
 
-int Program::ProduceWindow()
-{
+GLFWwindow* currentWindow;
+int Program::Window::Create() {
 	if (!glfwInit()) return 1;
 
 	// Window creation primary section
@@ -27,9 +34,9 @@ int Program::ProduceWindow()
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_VISIBLE, FALSE);
 
-		producedWindow = glfwCreateWindow(screenWidth, screenHeight, "OpenGL Triangle", NULL, NULL);
+		currentWindow = glfwCreateWindow(screenWidth, screenHeight, "OpenGL Triangle", NULL, NULL);
 	}
-	if (!producedWindow) {
+	if (!currentWindow) {
 		glfwTerminate();
 		return 1;
 	}
@@ -38,7 +45,7 @@ int Program::ProduceWindow()
 	{
 		HMODULE dwmapiHandle = LoadLibrary("Dwmapi.dll");
 
-		HWND win32_windowHandle = glfwGetWin32Window(producedWindow);
+		HWND win32_windowHandle = glfwGetWin32Window(currentWindow);
 		int tmp = TRUE;
 
 		auto SetAttribute = (int(*)(HWND, DWORD, LPCVOID, DWORD))GetProcAddress(dwmapiHandle, "DwmSetWindowAttribute");
@@ -48,10 +55,10 @@ int Program::ProduceWindow()
 	}
 
 	// Set callbacks
-	glfwSetFramebufferSizeCallback(producedWindow, WindowResizeCallback);
+	glfwSetFramebufferSizeCallback(currentWindow, WindowResizeCallback);
 
 	// Setup OpenGL
-	glfwMakeContextCurrent(producedWindow);
+	glfwMakeContextCurrent(currentWindow);
 	{
 		auto loadProcFunc = [](const char* name) -> void* {
 			return (void*)glfwGetProcAddress(name);
@@ -59,39 +66,34 @@ int Program::ProduceWindow()
 		gladLoadGLLoader(loadProcFunc);
 	}
 	glfwSwapInterval(1);
-	glfwShowWindow(producedWindow);
+	glfwShowWindow(currentWindow);
 	
 	return 0;
 }
-
-// Get functions
-int width, height;
-glm::ivec2 Program::GetWindowSize() {
-	return {width, height};
+void Program::Window::Deinitialise() {
+	glfwTerminate();
 }
-double Program::GetElapsedTime() {
+void Program::Window::UpdateWindow() {
+	glfwSwapBuffers(currentWindow);
+	glfwPollEvents();
+}
+
+// Set functions' implementation
+
+// Get functions' implementation
+bool Program::Window::WindowWillClose() {
+	return glfwWindowShouldClose(currentWindow);
+}
+const glm::ivec2& Program::Window::GetWindowSize() {
+	return windowSize;
+}
+double Program::Window::GetElapsedTime() {
 	return glfwGetTime();
 }
 
-void Program::Deinitialise() {
-	glfwTerminate();
-}
-
-void Program::StartUpdateLoop(void(*UpdateLoopFunction)())
-{
-	while (!glfwWindowShouldClose(producedWindow)) {
-		glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		UpdateLoopFunction();
-		
-		glfwSwapBuffers(producedWindow);
-		glfwPollEvents();
-	}
-}
-
-void WindowResizeCallback(GLFWwindow* window, int width, int height) {
-	width = width;
+// Callback functions' implementation
+inline void WindowResizeCallback(GLFWwindow* window, int width, int height) {
+	windowSize.x = width;
+	windowSize.y = height;
 	glViewport(0, 0, width, height);
 }
-

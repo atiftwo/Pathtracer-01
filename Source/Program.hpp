@@ -1,22 +1,20 @@
 #pragma once
-
 #include <glm/glm.hpp>
 
 namespace Program {
 	class Window {
-		Window();
+		public:
 		~Window();
 
-		public:
 		int Create();
 		void StartUpdateLoop();
 		void BreakUpdateLoop();
 		void Deinitialise();
 
-		typedef void(*UpdateLoopFunction)();
-		UpdateLoopFunction updateLoopFunction;
+		void UpdateWindow();
+		bool WindowWillClose();
 
-		glm::ivec2 GetWindowSize();
+		const glm::ivec2& GetWindowSize();
 		double GetElapsedTime();
 	};
 }
