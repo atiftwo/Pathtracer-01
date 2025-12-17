@@ -97,6 +97,7 @@ int Program::Window::Create() {
 	return 0;
 }
 void Program::Window::Deinitialise() {
+	if (GLFWwindow) glfwDestroyWindow(currentWindow);
 	glfwTerminate();
 }
 

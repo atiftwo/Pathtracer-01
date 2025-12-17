@@ -1,9 +1,7 @@
 ## To-Do List:
-- Understand why liboldnames.a isn't found
-- - Understand how and what libraries LLVM-MinGW is using, if it's using the window's libraries at all
 
-
-
-#3 To-Do List (9.12.25):
-- Move to GLFW and GLAD
-- - Make a basic example
+### - Orgranise structure
+- Produce a nice program-renderer type structure
+- - Have platform specific files for windowing, input handling
+- - Have a single source and header file that unifies all platform-specific thing to produce a platform-agnostic file
+- - Have the structure such that the renderer is able to do it's work without any inhibitions 
